@@ -1,10 +1,20 @@
+import os
+from reader.compressed import gzipped
+
+extension_map = {
+    '.gz': gzipped.opener
+}
+
+
 class Reader:
     def __init__(self, filename):
-        self.filename = filename
-        self.f = open(self.filename, 'rt')
+        extension = os.path.splitext(filename)[1]
+        opener = extension_map.get(extension, open)
+        # self.filename = filename
+        self.f = opener(filename, 'rt')
 
     def close(self):
         self.f.close()
 
     def read(self):
-    	return self.f.read()
+        return self.f.read()
